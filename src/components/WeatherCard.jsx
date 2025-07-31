@@ -57,8 +57,9 @@ const WeatherCard = ({ data }) => {
     }
   }
 
+  // Add a subtle animation when cards load
   return (
-    <div className="relative w-full h-48 rounded-2xl overflow-hidden shadow-xl">
+    <div className="relative w-full h-48 rounded-2xl overflow-hidden shadow-xl transition-all duration-500 hover:shadow-2xl">
       {/* Background gradient */}
       <div className={`absolute inset-0 bg-gradient-to-r ${getBackgroundGradient()}`} />
       
@@ -66,12 +67,14 @@ const WeatherCard = ({ data }) => {
       {renderSpecialEvent()}
 
       {/* Moon - positioned on the right side */}
-      <div 
-        className="absolute top-8 w-12 h-12 transition-all duration-1000"
-        style={{ right: `${moonRightPosition}px` }}
-      >
-        <MoonIcon phase={moonPhase} />
-      </div>
+      {timeOfDay === 'night' && (
+        <div 
+          className="absolute top-8 w-12 h-12 transition-all duration-1000"
+          style={{ right: `${moonRightPosition}px` }}
+        >
+          <MoonIcon phase={moonPhase} />
+        </div>
+      )}
 
       {/* Content */}
       <div className="relative z-10 h-full flex items-center justify-between p-8">
