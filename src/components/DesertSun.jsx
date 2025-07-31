@@ -22,6 +22,15 @@ const DesertSun = () => {
         <path d="M0,50 Q300,20 600,50 T1200,50 L1200,100 L0,100 Z" fill="currentColor" />
       </svg>
 
+      {/* Cactus silhouettes */}
+      <svg className="absolute bottom-4 left-1/4 w-12 h-16 text-gray-700/20" viewBox="0 0 60 80">
+        <rect x="25" y="20" width="10" height="60" fill="currentColor" />
+        <rect x="10" y="35" width="20" height="8" fill="currentColor" />
+        <rect x="5" y="30" width="8" height="20" fill="currentColor" />
+        <rect x="30" y="40" width="20" height="8" fill="currentColor" />
+        <rect x="47" y="35" width="8" height="20" fill="currentColor" />
+      </svg>
+
       <style jsx>{`
         @keyframes shimmer {
           0%, 100% { transform: translateY(0); }

@@ -8,6 +8,8 @@ import CarnivalLights from './CarnivalLights'
 import RainStorm from './RainStorm'
 import SnowFall from './SnowFall'
 import SunPosition from './SunPosition'
+import Landmarks from './Landmarks'
+import RegionalElements from './RegionalElements'
 
 const WeatherCard = ({ data }) => {
   const {
@@ -96,6 +98,12 @@ const WeatherCard = ({ data }) => {
       {/* Background gradient */}
       <div className={`absolute inset-0 bg-gradient-to-r ${getBackgroundGradient()}`} />
       
+      {/* Landmark silhouette */}
+      <Landmarks city={city} />
+
+      {/* Regional elements */}
+      <RegionalElements city={city} season={season} />
+
       {/* Special event visualization */}
       {renderSpecialEvent()}
 
