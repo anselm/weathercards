@@ -39,11 +39,19 @@ function App() {
   const [citiesData, setCitiesData] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const [usingFakeData, setUsingFakeData] = useState(false);
 
   useEffect(() => {
     const loadWeatherData = async () => {
       try {
         setLoading(true);
+        
+        // Check if we're likely using fake data
+        const apiKey = import.meta.env.VITE_OPENWEATHER_API_KEY;
+        if (!apiKey || apiKey === 'your_api_key_here' || apiKey === 'add your key') {
+          setUsingFakeData(true);
+        }
+        
         const citiesWithWeather = await fetchMultipleWeatherData(cities);
         
         // Process the weather data to add our custom fields
@@ -109,8 +117,19 @@ function App() {
     <div className="min-h-screen bg-gray-100 py-8">
       <div className="max-w-7xl mx-auto px-4 space-y-4">
         <div className="mb-8">
-          <h1 className="text-3xl font-bold text-gray-800">Live Weather Cards</h1>
-          <p className="text-gray-600 mt-2">Real-time weather data from around the world</p>
+          <h1 className="text-3xl font-bold text-gray-800">
+            {usingFakeData ? 'Weather Cards Demo' : 'Live Weather Cards'}
+          </h1>
+          <p className="text-gray-600 mt-2">
+            {usingFakeData 
+              ? 'Displaying simulated weather data (no API key configured)'
+              : 'Real-time weather data from around the world'}
+          </p>
+          {usingFakeData && (
+            <p className="text-sm text-amber-600 mt-2">
+              To see real weather data, add your OpenWeather API key to the .env file
+            </p>
+          )}
         </div>
         {citiesData.map((cityData, index) => (
           <WeatherCard key={index} data={cityData} />
