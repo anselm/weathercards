@@ -1,6 +1,10 @@
 import React from 'react'
 import MoonIcon from './MoonIcon'
 import CherryBlossoms from './CherryBlossoms'
+import NorthernLights from './NorthernLights'
+import DesertSun from './DesertSun'
+import AutumnLeaves from './AutumnLeaves'
+import CarnivalLights from './CarnivalLights'
 
 const WeatherCard = ({ data }) => {
   const {
@@ -33,44 +37,63 @@ const WeatherCard = ({ data }) => {
   }
 
   // Calculate moon position based on elevation
-  const moonBottomPosition = `${moonElevation}%`
+  const moonRightPosition = `${moonElevation}%`
+
+  // Render special event component
+  const renderSpecialEvent = () => {
+    switch (specialEvent) {
+      case 'cherry-blossom':
+        return <CherryBlossoms />
+      case 'northern-lights':
+        return <NorthernLights />
+      case 'desert-heat':
+        return <DesertSun />
+      case 'autumn-leaves':
+        return <AutumnLeaves />
+      case 'carnival':
+        return <CarnivalLights />
+      default:
+        return null
+    }
+  }
 
   return (
-    <div className="relative w-96 h-[600px] rounded-3xl overflow-hidden shadow-2xl">
+    <div className="relative w-full h-48 rounded-2xl overflow-hidden shadow-xl">
       {/* Background gradient */}
-      <div className={`absolute inset-0 bg-gradient-to-b ${getBackgroundGradient()}`} />
+      <div className={`absolute inset-0 bg-gradient-to-r ${getBackgroundGradient()}`} />
       
-      {/* Moon */}
+      {/* Special event visualization */}
+      {renderSpecialEvent()}
+
+      {/* Moon - positioned on the right side */}
       <div 
-        className="absolute right-8 w-16 h-16 transition-all duration-1000"
-        style={{ bottom: moonBottomPosition }}
+        className="absolute top-8 w-12 h-12 transition-all duration-1000"
+        style={{ right: `${moonRightPosition}px` }}
       >
         <MoonIcon phase={moonPhase} />
       </div>
 
-      {/* Cherry blossoms for spring in Tokyo */}
-      {specialEvent === 'cherry-blossom' && (
-        <CherryBlossoms />
-      )}
-
       {/* Content */}
-      <div className="relative z-10 h-full flex flex-col justify-between p-8">
-        {/* Top section */}
-        <div>
-          <h2 className="text-4xl font-bold text-white mb-2">{city}</h2>
-          <p className="text-xl text-white/80">{country}</p>
-          <p className="text-sm text-white/60 mt-1">
-            {coordinates.lat.toFixed(2)}°N, {coordinates.lon.toFixed(2)}°E
-          </p>
-        </div>
-
-        {/* Bottom section */}
-        <div>
-          <div className="text-6xl font-light text-white mb-2">
+      <div className="relative z-10 h-full flex items-center justify-between p-8">
+        {/* Left section */}
+        <div className="flex items-center space-x-8">
+          <div>
+            <h2 className="text-3xl font-bold text-white mb-1">{city}</h2>
+            <p className="text-lg text-white/80">{country}</p>
+            <p className="text-xs text-white/60 mt-1">
+              {Math.abs(coordinates.lat).toFixed(2)}°{coordinates.lat >= 0 ? 'N' : 'S'}, {Math.abs(coordinates.lon).toFixed(2)}°{coordinates.lon >= 0 ? 'E' : 'W'}
+            </p>
+          </div>
+          
+          <div className="text-5xl font-light text-white">
             {temperature}°
           </div>
+        </div>
+
+        {/* Right section */}
+        <div className="text-right">
           <p className="text-white/80 capitalize">{weather}</p>
-          <p className="text-white/60 text-sm mt-2">
+          <p className="text-white/60 text-sm mt-1">
             {season} • {timeOfDay}
           </p>
         </div>
