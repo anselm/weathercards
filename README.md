@@ -70,6 +70,25 @@ This project suggests that there's room in our design thinking for interfaces th
 
 As we continue to evolve human-computer interfaces, perhaps it's time to reconsider our relationship with visual complexity. Just as we wouldn't want all music to be simple melodies or all writing to be basic sentences, our visual interfaces can benefit from the kind of richness that engages both our analytical and aesthetic faculties.
 
+## Project Status & Future Directions
+
+This is a rough first pass at exploring rich weather visualizations. There's significant room for improvement, including:
+
+- **Richer Place Signifiers**: More precise landscape features, mountain ranges, coastlines, and geographical elements specific to each location
+- **Expanded Visual Vocabulary**: A dedicated repository of SVG background art and location-specific elements (which is beyond the scope of this initial exploration)
+- **Enhanced Weather Representations**: More nuanced depictions of weather phenomena, atmospheric conditions, and seasonal variations
+- **Cultural Elements**: Deeper integration of cultural markers and regional characteristics
+
+## Prior Art & Inspiration
+
+It's worth noting that weather cards and procedurally generated infographic displays do exist in various forms. For example:
+
+- **Google Weather Cards**: If you search for "weather in Dubai right now" on Chrome mobile, Google generates beautiful infographics based on their knowledge graph and current weather conditions
+- **Weather Apps**: Many weather providers offer rich visualizations that combine multiple data points
+- **News Graphics**: Media organizations increasingly use automated infographic generation for weather and climate reporting
+
+This project explores how we might push these concepts further, creating even richer, more emotionally resonant visualizations that celebrate the complexity of our world's weather patterns and the unique character of different locations.
+
 ## Contributing
 
 This is an exploration in progress. Contributions, ideas, and discussions about rich interface design are welcome.
