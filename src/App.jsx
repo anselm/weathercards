@@ -5,7 +5,10 @@ import {
   getTimeOfDay, 
   getSeason, 
   getMoonPhase, 
-  getSpecialEvent 
+  getSpecialEvent,
+  getWeatherCondition,
+  getSunElevation,
+  isSunVisible
 } from './services/weatherService'
 
 // Real cities with actual coordinates
@@ -50,15 +53,22 @@ function App() {
           const { weatherData } = city;
           const currentMonth = new Date().getMonth() + 1;
           
+          const timeOfDay = getTimeOfDay(weatherData.timezone, weatherData.sys.sunrise, weatherData.sys.sunset);
+          const season = getSeason(city.coordinates.lat, currentMonth);
+          
           return {
             ...city,
-            timeOfDay: getTimeOfDay(weatherData.timezone, weatherData.sys.sunrise, weatherData.sys.sunset),
-            season: getSeason(city.coordinates.lat, currentMonth),
+            timeOfDay,
+            season,
             weather: weatherData.weather[0].description,
             temperature: Math.round(weatherData.main.temp),
             moonPhase: getMoonPhase(),
             moonElevation: Math.floor(Math.random() * 80) + 10, // Still random for now
-            specialEvent: getSpecialEvent(city.city, getSeason(city.coordinates.lat, currentMonth), weatherData.weather[0].main)
+            specialEvent: getSpecialEvent(city.city, season, weatherData.weather[0].main),
+            weatherCondition: getWeatherCondition(weatherData),
+            sunElevation: getSunElevation(city.coordinates.lat, city.coordinates.lon, weatherData.timezone),
+            sunVisible: isSunVisible(weatherData, timeOfDay),
+            cloudCoverage: weatherData.clouds.all
           };
         }).filter(Boolean); // Remove any null entries
         

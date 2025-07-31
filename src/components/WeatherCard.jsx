@@ -5,6 +5,9 @@ import NorthernLights from './NorthernLights'
 import DesertSun from './DesertSun'
 import AutumnLeaves from './AutumnLeaves'
 import CarnivalLights from './CarnivalLights'
+import RainStorm from './RainStorm'
+import SnowFall from './SnowFall'
+import SunPosition from './SunPosition'
 
 const WeatherCard = ({ data }) => {
   const {
@@ -17,11 +20,26 @@ const WeatherCard = ({ data }) => {
     temperature,
     moonPhase,
     moonElevation,
-    specialEvent
+    specialEvent,
+    weatherCondition,
+    sunElevation,
+    sunVisible,
+    cloudCoverage
   } = data
 
-  // Determine card background based on time of day
+  // Determine card background based on time of day and weather
   const getBackgroundGradient = () => {
+    // Override for stormy weather
+    if (weatherCondition && (weatherCondition.type === 'storm' || weatherCondition.type === 'rain')) {
+      return 'from-gray-700 via-gray-600 to-gray-500'
+    }
+    
+    // Override for snowy weather
+    if (weatherCondition && weatherCondition.type === 'snow') {
+      return 'from-gray-200 via-blue-100 to-gray-300'
+    }
+    
+    // Normal time-based gradients
     switch (timeOfDay) {
       case 'morning':
         return 'from-orange-200 via-pink-200 to-blue-300'
@@ -57,6 +75,21 @@ const WeatherCard = ({ data }) => {
     }
   }
 
+  // Render weather condition effects
+  const renderWeatherEffect = () => {
+    if (!weatherCondition) return null;
+    
+    switch (weatherCondition.type) {
+      case 'rain':
+      case 'storm':
+        return <RainStorm intensity={weatherCondition.intensity} />
+      case 'snow':
+        return <SnowFall intensity={weatherCondition.intensity} />
+      default:
+        return null
+    }
+  }
+
   // Add a subtle animation when cards load
   return (
     <div className="relative w-full h-48 rounded-2xl overflow-hidden shadow-xl transition-all duration-500 hover:shadow-2xl">
@@ -66,6 +99,12 @@ const WeatherCard = ({ data }) => {
       {/* Special event visualization */}
       {renderSpecialEvent()}
 
+      {/* Weather effects (rain, snow, etc.) */}
+      {renderWeatherEffect()}
+
+      {/* Sun position indicator */}
+      <SunPosition elevation={sunElevation} isVisible={sunVisible} />
+
       {/* Moon - positioned on the right side */}
       {timeOfDay === 'night' && (
         <div 
@@ -73,6 +112,16 @@ const WeatherCard = ({ data }) => {
           style={{ right: `${moonRightPosition}px` }}
         >
           <MoonIcon phase={moonPhase} />
+        </div>
+      )}
+
+      {/* Cloud coverage indicator */}
+      {cloudCoverage > 20 && (
+        <div className="absolute top-0 left-0 right-0 h-full pointer-events-none">
+          <div 
+            className="absolute inset-0 bg-gradient-to-b from-gray-300/20 to-transparent"
+            style={{ opacity: cloudCoverage / 100 }}
+          />
         </div>
       )}
 

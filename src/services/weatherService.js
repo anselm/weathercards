@@ -85,3 +85,67 @@ export const getSpecialEvent = (city, season, weather) => {
   
   return null;
 };
+
+// Detect weather conditions for visual effects
+export const getWeatherCondition = (weatherData) => {
+  const main = weatherData.weather[0].main.toLowerCase();
+  const description = weatherData.weather[0].description.toLowerCase();
+  
+  if (main.includes('thunderstorm')) {
+    return { type: 'storm', intensity: 'heavy' };
+  }
+  if (main.includes('rain') || main.includes('drizzle')) {
+    const intensity = description.includes('heavy') ? 'heavy' : 
+                     description.includes('light') ? 'light' : 'moderate';
+    return { type: 'rain', intensity };
+  }
+  if (main.includes('snow')) {
+    const intensity = description.includes('heavy') ? 'heavy' : 
+                     description.includes('light') ? 'light' : 'moderate';
+    return { type: 'snow', intensity };
+  }
+  
+  return null;
+};
+
+// Calculate sun elevation based on time, latitude, and day of year
+export const getSunElevation = (lat, lon, timezone) => {
+  const now = new Date();
+  const localTime = new Date(now.getTime() + timezone * 1000);
+  const hours = localTime.getUTCHours();
+  const minutes = localTime.getUTCMinutes();
+  
+  // Simplified calculation - in reality this would be more complex
+  const timeDecimal = hours + minutes / 60;
+  
+  // Approximate sun elevation based on time of day
+  let elevation = 0;
+  if (timeDecimal >= 6 && timeDecimal <= 18) {
+    // Daytime - sun rises from 6 to noon, sets from noon to 18
+    const dayProgress = (timeDecimal - 6) / 12;
+    elevation = Math.sin(dayProgress * Math.PI) * 90;
+    
+    // Adjust for latitude (higher latitudes = lower sun)
+    const latAdjustment = Math.abs(lat) / 90;
+    elevation = elevation * (1 - latAdjustment * 0.5);
+  }
+  
+  return Math.max(0, Math.min(90, elevation));
+};
+
+// Determine if sun is visible based on weather and time
+export const isSunVisible = (weatherData, timeOfDay) => {
+  const clouds = weatherData.clouds.all; // Cloud coverage percentage
+  const weather = weatherData.weather[0].main.toLowerCase();
+  
+  // Sun not visible at night
+  if (timeOfDay === 'night') return false;
+  
+  // Sun not visible during storms or heavy precipitation
+  if (weather.includes('thunderstorm') || weather.includes('rain') || weather.includes('snow')) {
+    return false;
+  }
+  
+  // Partially visible with clouds
+  return clouds < 80;
+};
